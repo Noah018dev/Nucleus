@@ -161,3 +161,6 @@ cython_debug/
 
 # api-data
 API-KEY.TXT
+
+#temp-data
+*.mp3
