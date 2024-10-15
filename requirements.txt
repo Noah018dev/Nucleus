@@ -1,0 +1,8 @@
+pytz
+tzlocal
+openai
+colorama
+pydub
+flask
+pygame
+requests
