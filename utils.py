@@ -1,3 +1,4 @@
+import threading
 import pygame
 import requests
 from typing import Callable as function
@@ -17,31 +18,35 @@ def PlayFile(FilePath : str, Async : bool) -> function:
     pygame.mixer.init()
 
     # Load the MP3 file
-    pygame.mixer.music.load(FilePath)
+    t1 = threading.Thread(target=pygame.mixer.music.load, args=(FilePath,))
+    t1.start()
+    t1.join()
 
     # Play the music
-    pygame.mixer.music.play()
+    t2 = threading.Thread(target=pygame.mixer.music.play)
+    t2.start()
 
     # Keep the program running until the music finishes
-    try:
-        while pygame.mixer.music.get_busy():
-            sleep(0.3)
+    t3 = threading.Thread(target=pygame.mixer.music.get_busy)
+    t3.start()
+    while t3.is_alive():
+        sleep(0.3)
+        if Async :
+            t2.join()
+            break
 
-            if Async :
-                break
-    except Exception :
-        pygame.mixer.stop()
+    pygame.mixer.stop()
 
     return pygame.mixer.stop
     
 
-
 def DownloadFromURI(URI, SaveToFile) -> None :
-    response = requests.get(URI)
+    response = requests.get(URI, stream=True)
     
     if response.status_code == 200:
         with open(SaveToFile, 'wb') as file:
-            file.write(response.content)
+            for chunk in response.iter_content(1024):
+                file.write(chunk)
         debug('Downloaded file.')
         print('Downloaded')
     else:

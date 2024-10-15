@@ -251,19 +251,30 @@ SystemMessages = {
 
 cachever = -1
 
-def SpeakWithOutput(speech : str, Voice, disableasync=False) -> function:
+def SpeakWithOutput(speech: str, Voice, disableasync=False) -> function:
+    if Voice == 'none' :
+        return
+
+    """
+    Speak some text with a given voice and then play the file.
+    If disableasync is true, the function will not play the file asynchronously.
+    """
     global cachever
-    with contextlib.suppress(Exception):
+    # Check if the file to delete exists
+    if cachever > 0:
         file_to_delete = f'{cachever - 10}.mp3'
         if os.path.exists(file_to_delete):
-            os.remove(file_to_delete)
-            debug(f'Removed {file_to_delete} to save space.')
+            try:
+                os.remove(file_to_delete)
+                debug(f'Removed {file_to_delete} to save space.')
+            except OSError as e:
+                error(f'Error: {e.filename} - {e.strerror}')
     cachever += 1
     SpeakToFile(speech, Voice)
     return PlayFile(f'{cachever}.mp3', AsyncVoice and not(disableasync))
 
 CharacterNames = list(SystemMessages.keys())
-AllVoices = ['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer']
+AllVoices = ['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer', 'none']
 os.system('cls')
 print('Choose a voice for your Chatacter...\n')
 TMP1 = -1
@@ -381,19 +392,17 @@ def WaitWithExitAndTitle(Time : int, TitleCycle : int) -> None:
     Start = time()
     while time() - Start < Time and not Exiting:
         sleep(0.01)
-        match TitleCycle :
-            case 1 :
-                os.system(f'title Nucleus - Powered by GPT-4o, your SystemAI ({threading.active_count()})')
-            case 2 :
-                with contextlib.suppress(Exception) :
-                    if TypeOfOutput == 'text' :
-                        os.system(f'title Nucleus - {SystemName} ({threading.active_count()})')
-                    else :
-                        os.system(f'title Nucleus - {Output[OutputForms[1]]} ({threading.active_count()})')
-
-
+        if TitleCycle == 1 :
+            os.system(f'title Nucleus - Powered by GPT-4o, your SystemAI ({threading.active_count()})')
+        elif TitleCycle == 2 :
+            with contextlib.suppress(Exception):
+                if TypeOfOutput == 'text':
+                    os.system(f'title Nucleus - {SystemName} ({threading.active_count()})')
+                elif Output is not None and OutputForms is not None:
+                    os.system(f'title Nucleus - {Output[OutputForms[1]]} ({threading.active_count()})')
     if Exiting:
         NukeProgram()
+
  
 def TitleCycle() -> None:
     while True:
