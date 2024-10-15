@@ -5,4 +5,7 @@
 
  Warning : Doesn't work on POSIX or any other systems besides Windows. If you're on Linux or Mac, adding in scripts for your OS would be appreciated! :D
 
+# Launch
+ Run "main.py"!!!
+
 ¯\_(ツ)_/¯
