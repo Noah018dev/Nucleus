@@ -1,8 +1,8 @@
-import threading
-import pygame
-import requests
+import threading, requests, pygame, os
 from typing import Callable as function
+from speech import SpeakText as SpeakToFile
 from currylogger import *
+
 
 
 from time import sleep
@@ -54,3 +54,34 @@ def DownloadFromURI(URI, SaveToFile) -> None :
 
 def IfElse(Toggle, IfFalse, IfTrue) -> object:
     return IfTrue if Toggle else IfFalse
+
+def SystemMessageConstructor(Prompt) -> dict :
+    return {'role' : 'system', 'content' : Prompt}
+
+def SpeakWithOutput(speech: str, Voice, AsyncVoice, cachever, disableasync=False) -> function :
+
+    if Voice == 'none' :
+        return
+
+    """
+    Speak some text with a given voice and then play the file.
+    If disableasync is true, the function will not play the file asynchronously.
+    """
+    # Check if the file to delete exists
+    if cachever > 0:
+        file_to_delete = f'{cachever - 10}.mp3'
+        if os.path.exists(file_to_delete):
+            try:
+                os.remove(file_to_delete)
+                debug(f'Removed {file_to_delete} to save space.')
+            except OSError as e:
+                error(f'Error: {e.filename} - {e.strerror}')
+    cachever += 1
+    while True :
+        try :
+            SpeakToFile(speech, Voice)
+            break
+        except PermissionError :
+            cachever += 1
+            continue
+    return PlayFile(f'{cachever}.mp3', AsyncVoice and not(disableasync))

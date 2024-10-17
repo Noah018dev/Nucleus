@@ -16,7 +16,7 @@ Verbose = 0
 AsyncVoice = 'true'
 
 def GetCommand() -> str :
-    return f'start runtime-proxy.cmd "{LauncherClient} --headless {ComspecLaunch} start /wait {Client} {Python} -B -q -u {"-v " * Verbose} .\\ai.py --run-program --wipe-logs {IfElse(AsyncVoice.lower() == 'true', '', '--async-voice')}"'
+    return f'start runtime-proxy.cmd "{LauncherClient} --headless {ComspecLaunch} start /wait {Client} {Python} -B -q -u {"-v " * Verbose} .\\ai.py --run-program --wipe-logs {IfElse(AsyncVoice.lower() == "true", "", "--async-voice")}"'
 
 if len(argv) == 1 :
     argv.append(' ')
