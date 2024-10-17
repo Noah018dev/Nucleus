@@ -12,7 +12,7 @@ Alright, now time to launch :
 
 1. In "API-KEY.txt", enter your OpenAI api key.
 
-2. Inside the project root directory, run "python *ai.py* --install requirements", and use "pip install -r *requirements.txt*".
+2. Inside the project root directory, run "python *ai.py* --pip-install-requirements" and use "pip install -r *requirements.txt*".
 
 3. **Run *main.py***
 
