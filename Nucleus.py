@@ -21,9 +21,9 @@ else :
         case '--execute' :
             match argv[2] :
                 case '--advanced-runtime' :
-                    system('python runtimesettings.py --advanced')
+                    system('python main.py --advanced')
                 case '--defaults' :
-                    system('python runtimesettings.py --auto')
+                    system('python main.py --auto')
                 case _ :
                     print('nucleus --execute --defaults             - Runs Nucleus AI with default settings.')
                     print('nucleus --execute --advanced-runtime     - Allows you to customize your runtime. For advanced users.')

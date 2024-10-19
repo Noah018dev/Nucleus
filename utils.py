@@ -60,6 +60,8 @@ def SystemMessageConstructor(Prompt) -> dict :
 
 def SpeakWithOutput(speech: str, Voice, AsyncVoice, cachever, disableasync=False) -> function :
 
+    cachever = 0
+
     if Voice == 'none' :
         return
 
@@ -67,19 +69,12 @@ def SpeakWithOutput(speech: str, Voice, AsyncVoice, cachever, disableasync=False
     Speak some text with a given voice and then play the file.
     If disableasync is true, the function will not play the file asynchronously.
     """
-    # Check if the file to delete exists
-    if cachever > 0:
-        file_to_delete = f'{cachever - 10}.mp3'
-        if os.path.exists(file_to_delete):
-            try:
-                os.remove(file_to_delete)
-                debug(f'Removed {file_to_delete} to save space.')
-            except OSError as e:
-                error(f'Error: {e.filename} - {e.strerror}')
-    cachever += 1
     while True :
         try :
-            SpeakToFile(speech, Voice)
+            if os.path.exists(f'{cachever}.mp3') :
+                raise PermissionError
+            else :
+                SpeakToFile(speech, Voice)
             break
         except PermissionError :
             cachever += 1
