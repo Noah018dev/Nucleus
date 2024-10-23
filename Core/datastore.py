@@ -1,9 +1,10 @@
 from os import chdir, path
 import datetime
 
-chdir(path.dirname(__file__))
-
-OpenAI_API_KEY = open('API-KEY.TXT').read()
+try:
+    OpenAI_API_KEY = open('..\\API-KEY.TXT').read()
+except FileNotFoundError :
+    OpenAI_API_KEY = open('API-KEY.TXT').read()
 
 FileTypesInitalizedValue = {}
 
