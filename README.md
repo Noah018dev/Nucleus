@@ -14,6 +14,8 @@ Alright, now time to launch :
 
 2. Inside the project root directory, run "python *ai.py* --pip-install-requirements" and use "pip install -r *requirements.txt*".
 
-3. **Run *main.py***
+3. **Run *"nucleus --execute --defaults" or "nucleus --execute --advanced-runtime"***
+
+4. Realize that everything crashes right now.
 
 ¯\\_(ツ)_/¯
